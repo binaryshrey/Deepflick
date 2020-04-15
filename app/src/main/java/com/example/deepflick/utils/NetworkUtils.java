@@ -8,12 +8,14 @@ import java.net.URL;
 import java.util.Scanner;
 
 public class NetworkUtils {
+    //url parameters
     final static String BASE_URL = "https://api.themoviedb.org/3/movie";
     final static String API_KEY_PARAM = "api_key";
     final static String API_KEY = "**--INSERT API KEY--**";
     final static String LANGUAGE_PARAM = "language";
     final static String LANGUAGE = "en-US";
 
+    //method to build url
     public static URL buitlUrl(String searchQuery){
         Uri builturi = Uri.parse(BASE_URL).buildUpon()
                 .appendEncodedPath(searchQuery)
@@ -21,6 +23,7 @@ public class NetworkUtils {
                 .appendQueryParameter(LANGUAGE_PARAM,LANGUAGE)
                 .build();
 
+        //uri to url
         URL url = null;
         try{
             url = new URL(builturi.toString());

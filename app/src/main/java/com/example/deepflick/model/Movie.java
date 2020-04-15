@@ -1,6 +1,7 @@
 package com.example.deepflick.model;
 
 public class Movie {
+    //data members
     private String mTitle;
     private String mThumbnail;
     private String mRating;
@@ -8,9 +9,12 @@ public class Movie {
     private String mReleaseDate;
     private String mOverview;
 
+    //constructor
     public Movie(){}
 
+    //getter method
     public String getTitle() { return mTitle; }
+    //setter method
     public void setTitle(String mTitle) { this.mTitle = mTitle; }
 
     public String getThumbnail() { return  mThumbnail; }
