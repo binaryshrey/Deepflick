@@ -3,4 +3,6 @@
     <string name="sort">Sort</string>
     <string name="popular">Popular</string>
     <string name="top_rated">Top Rated</string>
+    <string name="error_msg">Unable to connect</string>
+    <string name="retry">Retry</string>
 </resources>
