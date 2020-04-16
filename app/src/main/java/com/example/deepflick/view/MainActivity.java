@@ -1,4 +1,4 @@
-package com.example.deepflick;
+package com.example.deepflick.view;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -7,7 +7,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -16,6 +15,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.deepflick.R;
 import com.example.deepflick.adapter.MoviesAdapter;
 import com.example.deepflick.model.Movie;
 import com.example.deepflick.utils.NetworkUtils;
