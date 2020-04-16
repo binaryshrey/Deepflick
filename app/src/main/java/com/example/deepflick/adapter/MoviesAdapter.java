@@ -17,18 +17,21 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MoviesAdapterViewHolder> {
-
+    //declaring data members
     public Movie[] mMovieData;
     public final MovieAdapterOnClickHandler mClickHandler;
 
+    //constructor
     public MoviesAdapter(Movie[] movie, MovieAdapterOnClickHandler clickHandler) {
         mMovieData = movie;
         mClickHandler = clickHandler;
     }
 
+    //onClickHandler interface
     public interface MovieAdapterOnClickHandler {
         void onClick(int adapterPosition);
     }
+
 
     @NonNull
     @Override
@@ -46,6 +49,7 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MoviesAdap
     public void onBindViewHolder(@NonNull MoviesAdapterViewHolder holder, int position) {
         //set the movie for list item's position
         String movieToBind = mMovieData[position].getThumbnail();
+        //loading image with picasso into mDetailThumbnail view
         Picasso.get()
                 .load(movieToBind)
                 .into(holder.mThumbnail);
@@ -53,20 +57,24 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MoviesAdap
 
     @Override
     public int getItemCount() {
+        //returning the count of mMovieData
         if (mMovieData == null)
             return 0;
         return mMovieData.length;
     }
 
     public class MoviesAdapterViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+        //using @BindView along with the id of the view to declare view variable
         @BindView(R.id.iv_thumbnail)
         ImageView mThumbnail;
 
         public MoviesAdapterViewHolder(View itemView) {
             super(itemView);
+            //binding the view using butterknife
             ButterKnife.bind(this,itemView);
+            itemView.setOnClickListener(this);
         }
-
+        //onClick method
         @Override
         public void onClick(View v) {
             int adapterPosition = getAdapterPosition();

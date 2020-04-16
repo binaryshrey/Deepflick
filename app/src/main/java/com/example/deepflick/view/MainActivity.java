@@ -28,6 +28,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class MainActivity extends AppCompatActivity implements MoviesAdapter.MovieAdapterOnClickHandler{
+
     public MoviesAdapter moviesAdapter;
     public Movie[] jsonMovieData;
     public String query_main = "popular";
@@ -66,6 +67,7 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Mov
 
     @Override
     public void onClick(int adapterPosition) {
+        Toast.makeText(this, jsonMovieData[adapterPosition].getTitle(), Toast.LENGTH_SHORT).show();
         
     }
 
