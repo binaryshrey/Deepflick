@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Menu;
@@ -66,10 +67,18 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Mov
     }
 
     @Override
-    public void onClick(int adapterPosition) {
-        Toast.makeText(this, jsonMovieData[adapterPosition].getTitle(), Toast.LENGTH_SHORT).show();
-        
+    public void onClick(int adapterPosition){
+        Intent intent = new Intent(MainActivity.this,DetailActivity.class);
+        intent.putExtra(Intent.EXTRA_TEXT,adapterPosition);
+        intent.putExtra("title",jsonMovieData[adapterPosition].getTitle());
+        intent.putExtra("poster", jsonMovieData[adapterPosition].getThumbnail());
+        intent.putExtra("rate", jsonMovieData[adapterPosition].getRating());
+        intent.putExtra("release", jsonMovieData[adapterPosition].getReleaseDate());
+        intent.putExtra("adult", jsonMovieData[adapterPosition].getAdult());
+        intent.putExtra("overview", jsonMovieData[adapterPosition].getOverview());
+        startActivity(intent);
     }
+
 
     public class FetchMovieTask extends AsyncTask<String, Void, Movie[]> {
 
