@@ -124,9 +124,11 @@ public class MainActivity extends AppCompatActivity {
         int itemThatWasSelected = item.getItemId();
         switch (itemThatWasSelected){
             case R.id.popular:
+                loadData(query_main);
                 Toast.makeText(this, "Popular Movies", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.top_rated:
+                loadData(query_sec);
                 Toast.makeText(this, "Top Rated Movies", Toast.LENGTH_SHORT).show();
         }
         return super.onOptionsItemSelected(item);
