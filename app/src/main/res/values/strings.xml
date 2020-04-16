@@ -5,4 +5,8 @@
     <string name="top_rated">Top Rated</string>
     <string name="error_msg">Unable to connect</string>
     <string name="retry">Retry</string>
+    <string name="rating">Rating : </string>
+    <string name="release_date">Release Date : </string>
+    <string name="adult">Adult Content : </string>
+    <string name="overview">Overview</string>
 </resources>
