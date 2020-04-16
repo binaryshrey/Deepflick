@@ -17,11 +17,19 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MoviesAdapterViewHolder> {
-    public Movie[] mMovieData;
 
-    public MoviesAdapter(Movie[] movie) {
+    public Movie[] mMovieData;
+    public final MovieAdapterOnClickHandler mClickHandler;
+
+    public MoviesAdapter(Movie[] movie, MovieAdapterOnClickHandler clickHandler) {
         mMovieData = movie;
+        mClickHandler = clickHandler;
     }
+
+    public interface MovieAdapterOnClickHandler {
+        void onClick(int adapterPosition);
+    }
+
     @NonNull
     @Override
     public MoviesAdapterViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int viewType) {
@@ -50,13 +58,19 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MoviesAdap
         return mMovieData.length;
     }
 
-    public class MoviesAdapterViewHolder extends RecyclerView.ViewHolder {
+    public class MoviesAdapterViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         @BindView(R.id.iv_thumbnail)
         ImageView mThumbnail;
 
         public MoviesAdapterViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this,itemView);
+        }
+
+        @Override
+        public void onClick(View v) {
+            int adapterPosition = getAdapterPosition();
+            mClickHandler.onClick(adapterPosition);
         }
     }
 }

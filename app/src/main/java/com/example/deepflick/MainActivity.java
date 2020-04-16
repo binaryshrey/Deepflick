@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -26,7 +27,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements MoviesAdapter.MovieAdapterOnClickHandler{
     public MoviesAdapter moviesAdapter;
     public Movie[] jsonMovieData;
     public String query_main = "popular";
@@ -63,6 +64,11 @@ public class MainActivity extends AppCompatActivity {
         new FetchMovieTask().execute(str);
     }
 
+    @Override
+    public void onClick(int adapterPosition) {
+        
+    }
+
     public class FetchMovieTask extends AsyncTask<String, Void, Movie[]> {
 
         @Override
@@ -93,7 +99,7 @@ public class MainActivity extends AppCompatActivity {
             mProgressBar.setVisibility(View.INVISIBLE);
             if (moviesData != null) {
                 showJsonDataResults();
-                moviesAdapter = new MoviesAdapter(moviesData);
+                moviesAdapter = new MoviesAdapter(moviesData,MainActivity.this);
                 mRecyclerView.setAdapter(moviesAdapter);
             } else
                 showErrorMessage();
