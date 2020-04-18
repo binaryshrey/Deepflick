@@ -38,6 +38,7 @@ public class DetailActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //setting contentView layout
         setContentView(R.layout.activity_detail);
         //binding the view using butterknife
         ButterKnife.bind(this);

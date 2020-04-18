@@ -32,7 +32,7 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MoviesAdap
         void onClick(int adapterPosition);
     }
 
-
+    //methods onCreateViewHolder, onBindViewHolder, getItemCount
     @NonNull
     @Override
     public MoviesAdapterViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int viewType) {
@@ -63,6 +63,7 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MoviesAdap
         return mMovieData.length;
     }
 
+    //ViewHolder class
     public class MoviesAdapterViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         //using @BindView along with the id of the view to declare view variable
         @BindView(R.id.iv_thumbnail)

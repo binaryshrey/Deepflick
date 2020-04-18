@@ -18,8 +18,11 @@ public class NetworkUtils {
     //method to build url
     public static URL buitlUrl(String searchQuery){
         Uri builturi = Uri.parse(BASE_URL).buildUpon()
+                //appending queryParameter
                 .appendEncodedPath(searchQuery)
+                //appending API key with value
                 .appendQueryParameter(API_KEY_PARAM,API_KEY)
+                //appending Lang param key with value
                 .appendQueryParameter(LANGUAGE_PARAM,LANGUAGE)
                 .build();
 
@@ -33,6 +36,7 @@ public class NetworkUtils {
         return url;
     }
 
+    // getResponseFromHttpUrl method
     public static String getResponseFromHttpUrl(URL url) throws IOException {
         HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
         try {

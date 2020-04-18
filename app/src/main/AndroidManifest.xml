@@ -11,13 +11,16 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <!--    Main Activity-->
         <activity android:name=".view.MainActivity"
             android:launchMode="singleTop">
+            <!--    to prevent re-creating of making activity from detail activity-->
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <!--    Detail Activity-->
         <activity
             android:name=".view.DetailActivity"
             android:parentActivityName=".view.MainActivity">

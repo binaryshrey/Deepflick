@@ -36,7 +36,7 @@ public class TMDBJsonUtils {
             movie.setReleaseDate(valuesArray.getJSONObject(i).optString(RELEASE_DATE_KEY));
             movie.setAdult(valuesArray.getJSONObject(i).optString(ADULT_CONTENT_KEY));
             movie.setOverview(valuesArray.getJSONObject(i).optString(OVERVIEW_KEY));
-
+            //storing movie data
             results[i] = movie;
         }
         return results;

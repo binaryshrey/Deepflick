@@ -27,14 +27,16 @@ import java.net.URL;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-
+//MainActivity implementing onClickHandler
 public class MainActivity extends AppCompatActivity implements MoviesAdapter.MovieAdapterOnClickHandler{
 
+    //defining data members
     public MoviesAdapter moviesAdapter;
     public Movie[] jsonMovieData;
     public String query_main = "popular";
     public String query_sec = "top_rated";
 
+    //using @BindView along with the id of the view to declare view variable
     @BindView(R.id.recyclerview_movies)
     RecyclerView mRecyclerView;
     @BindView(R.id.progress_bar)
@@ -48,43 +50,37 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Mov
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        //binding the view using butterknife
         ButterKnife.bind(this);
 
+        //defining grid layout that spans two columns
         GridLayoutManager layoutManager = new GridLayoutManager(this,2);
         mRecyclerView.setLayoutManager(layoutManager);
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setAdapter(moviesAdapter);
 
+        //passing the query parameter into the loadData method
         loadData(query_main);
     }
+    //method to fetch data on button click after detecting no internet connection
     @OnClick(R.id.retry)
     public void onButtonClick(View view){
         loadData(query_main);
     }
+
+    //method to fetch data based on query paramater
     public void loadData(String str){
         showJsonDataResults();
         new FetchMovieTask().execute(str);
     }
-
-    @Override
-    public void onClick(int adapterPosition){
-        Intent intent = new Intent(MainActivity.this,DetailActivity.class);
-        intent.putExtra(Intent.EXTRA_TEXT,adapterPosition);
-        intent.putExtra("title",jsonMovieData[adapterPosition].getTitle());
-        intent.putExtra("poster", jsonMovieData[adapterPosition].getThumbnail());
-        intent.putExtra("rate", jsonMovieData[adapterPosition].getRating());
-        intent.putExtra("release", jsonMovieData[adapterPosition].getReleaseDate());
-        intent.putExtra("adult", jsonMovieData[adapterPosition].getAdult());
-        intent.putExtra("overview", jsonMovieData[adapterPosition].getOverview());
-        startActivity(intent);
-    }
-
 
     public class FetchMovieTask extends AsyncTask<String, Void, Movie[]> {
 
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
+            //setting progressbar as visible
             mProgressBar.setVisibility(View.VISIBLE);
         }
 
@@ -93,8 +89,10 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Mov
             if (params.length == 0)
                 return null;
             String sortBy = params[0];
+            //method call to build url
             URL requestUrl = NetworkUtils.buitlUrl(sortBy);
             try {
+                //storing jsonResponse
                 String jsonResponse = NetworkUtils.getResponseFromHttpUrl(requestUrl);
                 jsonMovieData = TMDBJsonUtils.parseValuesFromJson(MainActivity.this, jsonResponse);
                 return jsonMovieData;
@@ -107,8 +105,10 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Mov
 
         @Override
         protected void onPostExecute(Movie[] moviesData) {
+            //setting progress bar as invisible
             mProgressBar.setVisibility(View.INVISIBLE);
             if (moviesData != null) {
+                //invoking showJsonDataResults method
                 showJsonDataResults();
                 moviesAdapter = new MoviesAdapter(moviesData,MainActivity.this);
                 mRecyclerView.setAdapter(moviesAdapter);
@@ -117,18 +117,33 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Mov
         }
     }
 
+    //setting error message and retry button as invisible and recyclerview as visible
     private void showJsonDataResults() {
         mErrorMessage.setVisibility(View.INVISIBLE);
         mRetry.setVisibility(View.INVISIBLE);
         mRecyclerView.setVisibility(View.VISIBLE);
     }
 
+    //setting error message and retry button as visible and recyclerview as invisible
     private void showErrorMessage() {
         mRecyclerView.setVisibility(View.INVISIBLE);
         mRetry.setVisibility(View.VISIBLE);
         mErrorMessage.setVisibility(View.VISIBLE);
     }
 
+    @Override
+    public void onClick(int adapterPosition){
+        //method to send info to detail activity
+        Intent intent = new Intent(MainActivity.this,DetailActivity.class);
+        intent.putExtra(Intent.EXTRA_TEXT,adapterPosition);
+        intent.putExtra("title",jsonMovieData[adapterPosition].getTitle());
+        intent.putExtra("poster", jsonMovieData[adapterPosition].getThumbnail());
+        intent.putExtra("rate", jsonMovieData[adapterPosition].getRating());
+        intent.putExtra("release", jsonMovieData[adapterPosition].getReleaseDate());
+        intent.putExtra("adult", jsonMovieData[adapterPosition].getAdult());
+        intent.putExtra("overview", jsonMovieData[adapterPosition].getOverview());
+        startActivity(intent);
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
