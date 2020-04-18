@@ -8,8 +8,8 @@
     android:padding="8dp">
 
     <androidx.cardview.widget.CardView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         card_view:cardBackgroundColor="@color/colorWhite"
         card_view:cardCornerRadius="8dp"
         card_view:cardElevation="2dp"

@@ -14,8 +14,8 @@
             android:layout_height="wrap_content"
             android:layout_marginRight="16dp"
             android:layout_marginBottom="16dp"
-            card_view:cardBackgroundColor="#fff"
-            card_view:cardCornerRadius="10dp"
+            card_view:cardBackgroundColor="@color/colorWhite"
+            card_view:cardCornerRadius="8dp"
             card_view:cardElevation="2dp"
             card_view:cardUseCompatPadding="false">
             <ImageView
