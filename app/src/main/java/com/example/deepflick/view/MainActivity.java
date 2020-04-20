@@ -33,8 +33,8 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Mov
     //defining data members
     public MoviesAdapter moviesAdapter;
     public Movie[] jsonMovieData;
-    public String query_main = "popular";
-    public String query_sec = "top_rated";
+    public String query = "popular";
+    public static final String LIFECYCLE_STATE = "state";
 
     //using @BindView along with the id of the view to declare view variable
     @BindView(R.id.recyclerview_movies)
@@ -49,6 +49,9 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Mov
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if(savedInstanceState != null)
+            query = savedInstanceState.getString(LIFECYCLE_STATE);
+
         setContentView(R.layout.activity_main);
 
         //binding the view using butterknife
@@ -61,12 +64,23 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Mov
         mRecyclerView.setAdapter(moviesAdapter);
 
         //passing the query parameter into the loadData method
-        loadData(query_main);
+        loadData(query);
     }
+
+    //onSaveInstanceState method to persist dataChanges on change of device configuration
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        String lifeCycleSortState = query;
+        outState.putString(LIFECYCLE_STATE,lifeCycleSortState);
+        super.onSaveInstanceState(outState);
+
+    }
+
+
     //method to fetch data on button click after detecting no internet connection
     @OnClick(R.id.retry)
     public void onButtonClick(View view){
-        loadData(query_main);
+        loadData(query);
     }
 
     //method to fetch data based on query paramater
@@ -156,11 +170,13 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Mov
         int itemThatWasSelected = item.getItemId();
         switch (itemThatWasSelected){
             case R.id.popular:
-                loadData(query_main);
+                query = "popular";
+                loadData(query);
                 Toast.makeText(this, "Popular Movies", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.top_rated:
-                loadData(query_sec);
+                query = "top_rated";
+                loadData(query);
                 Toast.makeText(this, "Top Rated Movies", Toast.LENGTH_SHORT).show();
         }
         return super.onOptionsItemSelected(item);
