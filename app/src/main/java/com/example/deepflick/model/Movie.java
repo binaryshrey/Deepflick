@@ -8,6 +8,7 @@ public class Movie {
     private String mAdult;
     private String mReleaseDate;
     private String mOverview;
+    private String mId;
 
     //constructor
     public Movie(){}
@@ -31,5 +32,8 @@ public class Movie {
 
     public String getOverview() {return  mOverview; }
     public void setOverview(String mOverview) { this.mOverview = mOverview; }
+
+    public String getId() { return mId; }
+    public void setId(String mId) { this.mId = mId; }
 
 }
