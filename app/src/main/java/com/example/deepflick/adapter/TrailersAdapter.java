@@ -14,15 +14,13 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.deepflick.R;
 import com.example.deepflick.model.Trailer;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
 
 public class TrailersAdapter extends RecyclerView.Adapter<TrailersAdapter.TrailersAdapterViewModel> {
 
     //declaring data members
-    TextView mTrailerName;
     private Trailer[] mTrailerData;
     final String BASE_URL = "https://www.youtube.com/watch?v=";
+    TextView mTrailerName;
     Context context;
 
     //constructor
@@ -65,21 +63,15 @@ public class TrailersAdapter extends RecyclerView.Adapter<TrailersAdapter.Traile
     @Override
     public int getItemCount() {
         //returning the count of mTrailerData
-        if (mTrailerData == null) {
+        if (mTrailerData == null)
             return 0;
-        }
         return mTrailerData.length;
     }
 
     public class TrailersAdapterViewModel extends RecyclerView.ViewHolder{
-        //using @BindView along with the id of the view to declare view variable
-        @BindView(R.id.Trailer_name)
-        TextView mTrailerName;
-
         public TrailersAdapterViewModel(@NonNull View itemView) {
             super(itemView);
-            //binding the view using butterknife
-            ButterKnife.bind(this,itemView);
+            mTrailerName = itemView.findViewById(R.id.Trailer_name);
         }
     }
 }

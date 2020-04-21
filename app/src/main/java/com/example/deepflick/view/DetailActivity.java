@@ -1,19 +1,34 @@
 package com.example.deepflick.view;
 
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.deepflick.R;
+import com.example.deepflick.adapter.TrailersAdapter;
+import com.example.deepflick.model.Trailer;
+import com.example.deepflick.utils.NetworkUtils;
+import com.example.deepflick.utils.TMDBJsonUtils;
 import com.squareup.picasso.Picasso;
+
+import java.net.URL;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class DetailActivity extends AppCompatActivity {
+    //data members
+    public TrailersAdapter mTrailerAdapter;
+    public Trailer[] jsonTrailerData;
+    public String id;
 
     //using @BindView along with the id of the view to declare view variable
     @BindView(R.id.detail_thumbnail)
@@ -34,6 +49,15 @@ public class DetailActivity extends AppCompatActivity {
     @BindView(R.id.overview)
     TextView mOverview;
 
+    @BindView(R.id.trailers_rv)
+    RecyclerView mRecyclerView;
+
+    @BindView(R.id.progress_bar_trailer)
+    ProgressBar mProgressBar;
+
+    @BindView(R.id.error_msg_trailer)
+    TextView mErrorMessage;
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -42,6 +66,16 @@ public class DetailActivity extends AppCompatActivity {
         setContentView(R.layout.activity_detail);
         //binding the view using butterknife
         ButterKnife.bind(this);
+
+
+        //horizontal layoutManager
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL,false);
+        //setting the layout
+        mRecyclerView.setLayoutManager(layoutManager);
+        mRecyclerView.setHasFixedSize(true);
+        //set trailer adapter for recycler view
+        mRecyclerView.setAdapter(mTrailerAdapter);
+
 
         //loading image with picasso into mDetailThumbnail view
         Picasso.get()
@@ -62,6 +96,61 @@ public class DetailActivity extends AppCompatActivity {
             mAdult.setText("Yes");
         else
             mAdult.setText("No");
+        //get Movie Id
+        id = getIntent().getStringExtra("id");
 
+        //method to load the trailers based on specific movie id
+        loadTrailers(id);
+
+    }
+
+    //method to load the trailers based on specific movie id
+    private void loadTrailers(String MovieId) {
+        new FetchTrailerTask().execute(MovieId);
+    }
+
+    // Async Task for fetch all trailers
+    public class FetchTrailerTask extends AsyncTask<String, Void, Trailer[]> {
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            //setting progressbar as visible
+            mProgressBar.setVisibility(View.VISIBLE);
+        }
+
+        @Override
+        protected Trailer[] doInBackground(String... params) {
+            if (params.length == 0)
+                return null;
+
+            //method call to build main url
+            URL trailersUrl = NetworkUtils.buildTrailerUrl(id);
+
+            try {
+                //storing jsonResponse
+                String jsonTrailerResponse = NetworkUtils.getResponseFromHttpUrl(trailersUrl);
+                jsonTrailerData = TMDBJsonUtils.parseTrailerValuesFromJson(DetailActivity.this, jsonTrailerResponse);
+                return jsonTrailerData;
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                return null;
+            }
+        }
+
+        @Override
+        protected void onPostExecute(Trailer[] trailerData) {
+            //setting progress bar as invisible
+            mProgressBar.setVisibility(View.INVISIBLE);
+            mRecyclerView.setVisibility(View.VISIBLE);
+            if (trailerData != null) {
+                mErrorMessage.setVisibility(View.INVISIBLE);
+                mTrailerAdapter = new TrailersAdapter(trailerData, DetailActivity.this);
+                mRecyclerView.setAdapter(mTrailerAdapter);
+            } else {
+                mErrorMessage.setVisibility(View.VISIBLE);
+                mRecyclerView.setVisibility(View.INVISIBLE);
+            }
+        }
     }
 }

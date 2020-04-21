@@ -39,6 +39,7 @@ public class TMDBJsonUtils {
             movie.setReleaseDate(valuesArray.getJSONObject(i).optString(RELEASE_DATE_KEY));
             movie.setAdult(valuesArray.getJSONObject(i).optString(ADULT_CONTENT_KEY));
             movie.setOverview(valuesArray.getJSONObject(i).optString(OVERVIEW_KEY));
+            movie.setId(valuesArray.getJSONObject(i).optString(ID_KEY));
             //storing movie data
             results[i] = movie;
         }
@@ -58,7 +59,7 @@ public class TMDBJsonUtils {
         JSONArray valuesArray = json.getJSONArray(ROOT_OBJECT);
         Trailer trailerResults[] = new Trailer[valuesArray.length()];
         for (int i = 0; i < valuesArray.length(); i++) {
-            //creating object of class Movie using new keyword
+            //creating object of class Trailer using new keyword
             Trailer trailer = new Trailer();
             //calling setters methods
             trailer.setKey(valuesArray.getJSONObject(i).optString(TRAILER_KEY_KEY));
