@@ -9,4 +9,6 @@
     <string name="release_date">Release Date : </string>
     <string name="adult">Adult Content : </string>
     <string name="overview">Overview</string>
+    <string name="review">Reviews</string>
+    <string name="trailers">Trailers</string>
 </resources>
