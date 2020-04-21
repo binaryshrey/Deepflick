@@ -156,6 +156,7 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Mov
         intent.putExtra("release", jsonMovieData[adapterPosition].getReleaseDate());
         intent.putExtra("adult", jsonMovieData[adapterPosition].getAdult());
         intent.putExtra("overview", jsonMovieData[adapterPosition].getOverview());
+        intent.putExtra("id",jsonMovieData[adapterPosition].getId());
         startActivity(intent);
     }
 
