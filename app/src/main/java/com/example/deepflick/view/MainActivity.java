@@ -103,8 +103,8 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Mov
             if (params.length == 0)
                 return null;
             String sortBy = params[0];
-            //method call to build url
-            URL requestUrl = NetworkUtils.buitlUrl(sortBy);
+            //method call to build main url
+            URL requestUrl = NetworkUtils.buildMainUrl(sortBy);
             try {
                 //storing jsonResponse
                 String jsonResponse = NetworkUtils.getResponseFromHttpUrl(requestUrl);

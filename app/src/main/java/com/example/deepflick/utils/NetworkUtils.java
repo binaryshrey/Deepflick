@@ -4,6 +4,7 @@ import android.net.Uri;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Scanner;
 
@@ -12,11 +13,12 @@ public class NetworkUtils {
     final static String BASE_URL = "https://api.themoviedb.org/3/movie";
     final static String API_KEY_PARAM = "api_key";
     final static String API_KEY = "**--INSERT API KEY--**";
+    final static String TRAILERS_KEY = "videos";
     final static String LANGUAGE_PARAM = "language";
     final static String LANGUAGE = "en-US";
 
-    //method to build url
-    public static URL buitlUrl(String searchQuery){
+    //method to build main URL
+    public static URL buildMainUrl(String searchQuery){
         Uri builturi = Uri.parse(BASE_URL).buildUpon()
                 //appending queryParameter
                 .appendEncodedPath(searchQuery)
@@ -31,6 +33,28 @@ public class NetworkUtils {
         try{
             url = new URL(builturi.toString());
         } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return url;
+    }
+
+    //method to build trailers URL
+    public static URL buildTrailerUrl(String MovieId){
+        Uri builtUri = Uri.parse(BASE_URL).buildUpon()
+                //adds movieId to path
+                .appendEncodedPath(String.valueOf(MovieId))
+                //adds videos to path
+                .appendEncodedPath(TRAILERS_KEY)
+                //appending API key with value
+                .appendQueryParameter(API_KEY_PARAM, API_KEY)
+                //appending Lang param key with value
+                .appendQueryParameter(LANGUAGE_PARAM, LANGUAGE)
+                .build();
+
+        URL url = null;
+        try{
+            url = new URL(builtUri.toString());
+        } catch (MalformedURLException e){
             e.printStackTrace();
         }
         return url;
