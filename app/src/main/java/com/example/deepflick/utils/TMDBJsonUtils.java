@@ -3,6 +3,7 @@ package com.example.deepflick.utils;
 import android.content.Context;
 
 import com.example.deepflick.model.Movie;
+import com.example.deepflick.model.Review;
 import com.example.deepflick.model.Trailer;
 
 import org.json.JSONArray;
@@ -11,7 +12,7 @@ import org.json.JSONObject;
 
 public class TMDBJsonUtils {
 
-    //method to parse json data
+    //method to parse movies_json data
     public static Movie[] parseValuesFromJson(Context context, String data) throws JSONException {
         //data members
         final String ROOT_OBJECT = "results";
@@ -46,7 +47,7 @@ public class TMDBJsonUtils {
         return results;
     }
 
-    //method to parse Trailer json data
+    //method to parse trailers_json data
     public static Trailer[] parseTrailerValuesFromJson(Context context, String data) throws JSONException {
         //data members
         final String ROOT_OBJECT = "results";
@@ -68,5 +69,33 @@ public class TMDBJsonUtils {
             trailerResults[i] = trailer;
         }
         return trailerResults;
+    }
+
+    //method to parse reviews_json data
+    public static Review[] parseReviewValuesFromJson(Context context, String data) throws JSONException{
+        //data members
+        final String ROOT_OBJECT = "results";
+        final String AUTHOR_KEY = "author";
+        final String CONTENT_KEY = "content";
+        final String ID_KEY = "id";
+        final String URL_KEY = "url";
+
+        //initialize json object from json string
+        JSONObject json = new JSONObject(data);
+        JSONArray valuesArray = json.getJSONArray(ROOT_OBJECT);
+        Review reviewsResults[] = new Review[valuesArray.length()];
+        for (int i = 0; i < valuesArray.length(); i++) {
+            //creating object of class Review using new keyword
+            Review review = new Review();
+            //calling setters methods
+            review.setAuthor(valuesArray.getJSONObject(i).optString(AUTHOR_KEY));
+            review.setContent(valuesArray.getJSONObject(i).optString(CONTENT_KEY));
+            review.setId(valuesArray.getJSONObject(i).optString(ID_KEY));
+            review.setUrl(valuesArray.getJSONObject(i).optString(URL_KEY));
+
+            //storing review data
+            reviewsResults[i] = review;
+        }
+        return reviewsResults;
     }
 }
