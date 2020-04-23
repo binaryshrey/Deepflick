@@ -13,7 +13,8 @@ public class NetworkUtils {
     final static String BASE_URL = "https://api.themoviedb.org/3/movie";
     final static String API_KEY_PARAM = "api_key";
     final static String API_KEY = "**--INSERT API KEY--**";
-    final static String TRAILERS_KEY = "videos";
+    final static String TRAILERS_PATH = "videos";
+    final static String REVIEWS_PATH = "reviews";
     final static String LANGUAGE_PARAM = "language";
     final static String LANGUAGE = "en-US";
 
@@ -44,7 +45,29 @@ public class NetworkUtils {
                 //adds movieId to path
                 .appendEncodedPath(String.valueOf(MovieId))
                 //adds videos to path
-                .appendEncodedPath(TRAILERS_KEY)
+                .appendEncodedPath(TRAILERS_PATH)
+                //appending API key with value
+                .appendQueryParameter(API_KEY_PARAM, API_KEY)
+                //appending Lang param key with value
+                .appendQueryParameter(LANGUAGE_PARAM, LANGUAGE)
+                .build();
+
+        URL url = null;
+        try{
+            url = new URL(builtUri.toString());
+        } catch (MalformedURLException e){
+            e.printStackTrace();
+        }
+        return url;
+    }
+
+    //method to build reviews URL
+    public static URL buildReviewsUrl(String MovieId){
+        Uri builtUri = Uri.parse(BASE_URL).buildUpon()
+                //adds movieId to path
+                .appendEncodedPath(String.valueOf(MovieId))
+                //adds videos to path
+                .appendEncodedPath(REVIEWS_PATH)
                 //appending API key with value
                 .appendQueryParameter(API_KEY_PARAM, API_KEY)
                 //appending Lang param key with value
