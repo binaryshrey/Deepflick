@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">deepflick</string>
+    <string name="app_name">Deepflick</string>
     <string name="sort">Sort</string>
     <string name="popular">Popular</string>
     <string name="top_rated">Top Rated</string>
