@@ -13,16 +13,18 @@ import com.example.deepflick.R;
 import com.example.deepflick.model.Movie;
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MoviesAdapterViewHolder> {
     //declaring data members
-    public Movie[] mMovieData;
+    public ArrayList<Movie> mMovieData;
     public final MovieAdapterOnClickHandler mClickHandler;
 
     //constructor
-    public MoviesAdapter(Movie[] movie, MovieAdapterOnClickHandler clickHandler) {
+    public MoviesAdapter(ArrayList<Movie> movie, MovieAdapterOnClickHandler clickHandler) {
         mMovieData = movie;
         mClickHandler = clickHandler;
     }
@@ -48,7 +50,7 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MoviesAdap
     @Override
     public void onBindViewHolder(@NonNull MoviesAdapterViewHolder holder, int position) {
         //set the movie for list item's position
-        String movieToBind = mMovieData[position].getThumbnail();
+        String movieToBind = mMovieData.get(position).getThumbnail();
         //loading image with picasso into mDetailThumbnail view
         Picasso.get()
                 .load(movieToBind)
@@ -60,7 +62,7 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MoviesAdap
         //returning the count of mMovieData
         if (mMovieData == null)
             return 0;
-        return mMovieData.length;
+        return mMovieData.size();
     }
 
     //ViewHolder class

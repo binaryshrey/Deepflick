@@ -10,10 +10,12 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+
 public class TMDBJsonUtils {
 
     //method to parse movies_json data
-    public static Movie[] parseValuesFromJson(Context context, String data) throws JSONException {
+    public static ArrayList<Movie> parseValuesFromJson(Context context, String data) throws JSONException {
         //data members
         final String ROOT_OBJECT = "results";
         final String TITLE_KEY = "title";
@@ -29,7 +31,7 @@ public class TMDBJsonUtils {
         JSONObject json = new JSONObject(data);
         //name a json object
         JSONArray valuesArray = json.getJSONArray(ROOT_OBJECT);
-        Movie results[] = new Movie[valuesArray.length()];
+        ArrayList<Movie> movieResults = new ArrayList<>(valuesArray.length());
         for(int i=0;i<valuesArray.length();i++){
             //creating object of class Movie using new keyword
             Movie movie = new Movie();
@@ -42,13 +44,13 @@ public class TMDBJsonUtils {
             movie.setOverview(valuesArray.getJSONObject(i).optString(OVERVIEW_KEY));
             movie.setId(valuesArray.getJSONObject(i).optString(ID_KEY));
             //storing movie data
-            results[i] = movie;
+            movieResults.add(movie);
         }
-        return results;
+        return movieResults;
     }
 
     //method to parse trailers_json data
-    public static Trailer[] parseTrailerValuesFromJson(Context context, String data) throws JSONException {
+    public static ArrayList<Trailer> parseTrailerValuesFromJson(Context context, String data) throws JSONException {
         //data members
         final String ROOT_OBJECT = "results";
         final String TRAILER_KEY_KEY = "key";
@@ -58,7 +60,7 @@ public class TMDBJsonUtils {
         JSONObject json = new JSONObject(data);
         //name a json object
         JSONArray valuesArray = json.getJSONArray(ROOT_OBJECT);
-        Trailer trailerResults[] = new Trailer[valuesArray.length()];
+        ArrayList<Trailer> trailerResults = new ArrayList<>(valuesArray.length());
         for (int i = 0; i < valuesArray.length(); i++) {
             //creating object of class Trailer using new keyword
             Trailer trailer = new Trailer();
@@ -66,13 +68,13 @@ public class TMDBJsonUtils {
             trailer.setKey(valuesArray.getJSONObject(i).optString(TRAILER_KEY_KEY));
             trailer.setName(valuesArray.getJSONObject(i).optString(TRAILER_NAME_KEY));
             //storing trailer data
-            trailerResults[i] = trailer;
+            trailerResults.add(trailer);
         }
         return trailerResults;
     }
 
     //method to parse reviews_json data
-    public static Review[] parseReviewValuesFromJson(Context context, String data) throws JSONException{
+    public static ArrayList<Review> parseReviewValuesFromJson(Context context, String data) throws JSONException{
         //data members
         final String ROOT_OBJECT = "results";
         final String AUTHOR_KEY = "author";
@@ -83,7 +85,7 @@ public class TMDBJsonUtils {
         //initialize json object from json string
         JSONObject json = new JSONObject(data);
         JSONArray valuesArray = json.getJSONArray(ROOT_OBJECT);
-        Review reviewsResults[] = new Review[valuesArray.length()];
+        ArrayList<Review> reviewResults = new ArrayList<>(valuesArray.length());
         for (int i = 0; i < valuesArray.length(); i++) {
             //creating object of class Review using new keyword
             Review review = new Review();
@@ -94,8 +96,8 @@ public class TMDBJsonUtils {
             review.setUrl(valuesArray.getJSONObject(i).optString(URL_KEY));
 
             //storing review data
-            reviewsResults[i] = review;
+            reviewResults.add(review);
         }
-        return reviewsResults;
+        return reviewResults;
     }
 }

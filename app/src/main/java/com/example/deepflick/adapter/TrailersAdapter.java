@@ -14,17 +14,19 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.deepflick.R;
 import com.example.deepflick.model.Trailer;
 
+import java.util.ArrayList;
+
 
 public class TrailersAdapter extends RecyclerView.Adapter<TrailersAdapter.TrailersAdapterViewModel> {
 
     //declaring data members
-    private Trailer[] mTrailerData;
+    private ArrayList<Trailer> mTrailerData;
     final String BASE_URL = "https://www.youtube.com/watch?v=";
     TextView mTrailerName;
     Context context;
 
     //constructor
-    public TrailersAdapter(Trailer[] trailer, Context context) {
+    public TrailersAdapter(ArrayList<Trailer> trailer, Context context) {
         mTrailerData = trailer;
         this.context = context;
     }
@@ -45,8 +47,8 @@ public class TrailersAdapter extends RecyclerView.Adapter<TrailersAdapter.Traile
 
     @Override
     public void onBindViewHolder(@NonNull TrailersAdapterViewModel holder, int position) {
-        String TrailerToBind = mTrailerData[position].getName();
-        final String TrailerToWatch = mTrailerData[position].getKey();
+        String TrailerToBind = mTrailerData.get(position).getName();
+        final String TrailerToWatch = mTrailerData.get(position).getKey();
         mTrailerName.setText(TrailerToBind);
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -65,7 +67,7 @@ public class TrailersAdapter extends RecyclerView.Adapter<TrailersAdapter.Traile
         //returning the count of mTrailerData
         if (mTrailerData == null)
             return 0;
-        return mTrailerData.length;
+        return mTrailerData.size();
     }
 
     public class TrailersAdapterViewModel extends RecyclerView.ViewHolder{

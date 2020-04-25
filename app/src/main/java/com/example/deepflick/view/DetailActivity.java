@@ -20,6 +20,7 @@ import com.example.deepflick.utils.TMDBJsonUtils;
 import com.squareup.picasso.Picasso;
 
 import java.net.URL;
+import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -27,7 +28,7 @@ import butterknife.ButterKnife;
 public class DetailActivity extends AppCompatActivity {
     //data members
     public TrailersAdapter mTrailerAdapter;
-    public Trailer[] jsonTrailerData;
+    public ArrayList<Trailer> jsonTrailerData;
     public String id;
 
     //using @BindView along with the id of the view to declare view variable
@@ -110,7 +111,7 @@ public class DetailActivity extends AppCompatActivity {
     }
 
     // Async Task for fetch all trailers
-    public class FetchTrailerTask extends AsyncTask<String, Void, Trailer[]> {
+    public class FetchTrailerTask extends AsyncTask<String, Void, ArrayList<Trailer>> {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
@@ -119,7 +120,7 @@ public class DetailActivity extends AppCompatActivity {
         }
 
         @Override
-        protected Trailer[] doInBackground(String... params) {
+        protected ArrayList<Trailer> doInBackground(String... params) {
             if (params.length == 0)
                 return null;
 
@@ -139,7 +140,7 @@ public class DetailActivity extends AppCompatActivity {
         }
 
         @Override
-        protected void onPostExecute(Trailer[] trailerData) {
+        protected void onPostExecute(ArrayList<Trailer> trailerData) {
             //setting progress bar as invisible
             mProgressBar.setVisibility(View.INVISIBLE);
             mRecyclerView.setVisibility(View.VISIBLE);

@@ -23,6 +23,7 @@ import com.example.deepflick.utils.NetworkUtils;
 import com.example.deepflick.utils.TMDBJsonUtils;
 
 import java.net.URL;
+import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -32,7 +33,7 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Mov
 
     //defining data members
     public MoviesAdapter moviesAdapter;
-    public Movie[] jsonMovieData;
+    public ArrayList<Movie> jsonMovieData;
     public String query = "popular";
     public static final String LIFECYCLE_STATE = "state";
 
@@ -89,7 +90,7 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Mov
         new FetchMovieTask().execute(str);
     }
 
-    public class FetchMovieTask extends AsyncTask<String, Void, Movie[]> {
+    public class FetchMovieTask extends AsyncTask<String, Void, ArrayList<Movie>> {
 
         @Override
         protected void onPreExecute() {
@@ -99,7 +100,7 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Mov
         }
 
         @Override
-        protected Movie[] doInBackground(String... params) {
+        protected ArrayList<Movie> doInBackground(String... params) {
             if (params.length == 0)
                 return null;
             String sortBy = params[0];
@@ -118,7 +119,7 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Mov
         }
 
         @Override
-        protected void onPostExecute(Movie[] moviesData) {
+        protected void onPostExecute(ArrayList<Movie> moviesData) {
             //setting progress bar as invisible
             mProgressBar.setVisibility(View.INVISIBLE);
             if (moviesData != null) {
@@ -150,13 +151,13 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Mov
         //method to send info to detail activity
         Intent intent = new Intent(MainActivity.this,DetailActivity.class);
         intent.putExtra(Intent.EXTRA_TEXT,adapterPosition);
-        intent.putExtra("title",jsonMovieData[adapterPosition].getTitle());
-        intent.putExtra("poster", jsonMovieData[adapterPosition].getThumbnail());
-        intent.putExtra("rate", jsonMovieData[adapterPosition].getRating());
-        intent.putExtra("release", jsonMovieData[adapterPosition].getReleaseDate());
-        intent.putExtra("adult", jsonMovieData[adapterPosition].getAdult());
-        intent.putExtra("overview", jsonMovieData[adapterPosition].getOverview());
-        intent.putExtra("id",jsonMovieData[adapterPosition].getId());
+        intent.putExtra("title",jsonMovieData.get(adapterPosition).getTitle());
+        intent.putExtra("poster", jsonMovieData.get(adapterPosition).getThumbnail());
+        intent.putExtra("rate", jsonMovieData.get(adapterPosition).getRating());
+        intent.putExtra("release", jsonMovieData.get(adapterPosition).getReleaseDate());
+        intent.putExtra("adult", jsonMovieData.get(adapterPosition).getAdult());
+        intent.putExtra("overview", jsonMovieData.get(adapterPosition).getOverview());
+        intent.putExtra("id",jsonMovieData.get(adapterPosition).getId());
         startActivity(intent);
     }
 
