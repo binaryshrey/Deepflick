@@ -13,7 +13,9 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.deepflick.R;
+import com.example.deepflick.adapter.ReviewsAdapter;
 import com.example.deepflick.adapter.TrailersAdapter;
+import com.example.deepflick.model.Review;
 import com.example.deepflick.model.Trailer;
 import com.example.deepflick.utils.NetworkUtils;
 import com.example.deepflick.utils.TMDBJsonUtils;
@@ -29,6 +31,10 @@ public class DetailActivity extends AppCompatActivity {
     //data members
     public TrailersAdapter mTrailerAdapter;
     public ArrayList<Trailer> jsonTrailerData;
+
+    public ReviewsAdapter mReviewAdapter;
+    public ArrayList<Review> jsonReviewData;
+
     public String id;
 
     //using @BindView along with the id of the view to declare view variable
@@ -59,6 +65,15 @@ public class DetailActivity extends AppCompatActivity {
     @BindView(R.id.error_msg_trailer)
     TextView mErrorMessage;
 
+    @BindView(R.id.reviews_rv)
+    RecyclerView mReviewRecyclerView;
+
+    @BindView(R.id.progress_bar_review)
+    ProgressBar mReviewProgressBar;
+
+    @BindView(R.id.error_msg_review)
+    TextView mReviewErrorMessage;
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -77,6 +92,12 @@ public class DetailActivity extends AppCompatActivity {
         //set trailer adapter for recycler view
         mRecyclerView.setAdapter(mTrailerAdapter);
 
+
+        LinearLayoutManager reviewsLM = new LinearLayoutManager(this);
+        mReviewRecyclerView.setLayoutManager(reviewsLM);
+        mReviewRecyclerView.setHasFixedSize(true);
+        mReviewAdapter = new ReviewsAdapter(jsonReviewData);
+        mReviewRecyclerView.setAdapter(mReviewAdapter);
 
         //loading image with picasso into mDetailThumbnail view
         Picasso.get()
@@ -102,12 +123,16 @@ public class DetailActivity extends AppCompatActivity {
 
         //method to load the trailers based on specific movie id
         loadTrailers(id);
+        loadReviews(id);
 
     }
 
     //method to load the trailers based on specific movie id
     private void loadTrailers(String MovieId) {
         new FetchTrailerTask().execute(MovieId);
+    }
+    private void loadReviews(String id) {
+        new FetchReviewTask().execute(id);
     }
 
     // Async Task for fetch all trailers
@@ -154,4 +179,52 @@ public class DetailActivity extends AppCompatActivity {
             }
         }
     }
+
+    //Async task for reviews
+    public class FetchReviewTask extends AsyncTask<String, Void, ArrayList<Review>> {
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            mReviewProgressBar.setVisibility(View.VISIBLE);
+        }
+
+        @Override
+        protected ArrayList<Review> doInBackground(String... params) {
+            if (params.length == 0){
+                return null;
+            }
+
+            URL movieRequestUrl = NetworkUtils.buildReviewsUrl(id);
+
+            try {
+                String jsonMovieResponse = NetworkUtils.getResponseFromHttpUrl(movieRequestUrl);
+
+                jsonReviewData
+                        = TMDBJsonUtils.parseReviewValuesFromJson(DetailActivity.this, jsonMovieResponse);
+
+                return jsonReviewData;
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                return null;
+            }
+        }
+
+        @Override
+        protected void onPostExecute(ArrayList<Review> reviewData) {
+            mReviewProgressBar.setVisibility(View.INVISIBLE);
+            mReviewRecyclerView.setVisibility(View.VISIBLE);
+            if (reviewData != null) {
+                mReviewErrorMessage.setVisibility(View.INVISIBLE);
+                mReviewAdapter = new ReviewsAdapter(reviewData);
+                mReviewRecyclerView.setAdapter(mReviewAdapter);
+            }else{
+                mReviewErrorMessage.setVisibility(View.VISIBLE);
+                mReviewErrorMessage.setVisibility(View.INVISIBLE);
+            }
+        }
+
+    }
+
+
 }
