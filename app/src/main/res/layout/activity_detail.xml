@@ -173,6 +173,30 @@
                 android:layout_marginBottom="4dp"
                 android:text="@string/review"
                 android:textStyle="bold" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/reviews_rv"
+                android:layout_below="@+id/Reviews"/>
+
+            <TextView
+                android:id="@+id/error_msg_review"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:layout_marginTop="16dp"
+                android:text="@string/error_msg"
+                android:textSize="16sp"
+                android:visibility="invisible" />
+
+            <ProgressBar
+                android:id="@+id/progress_bar_review"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_centerInParent="true"
+                android:layout_marginTop="16dp"
+                android:visibility="invisible" />
         </RelativeLayout>
 
     </RelativeLayout>
