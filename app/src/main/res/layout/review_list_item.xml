@@ -1,46 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content">
-<RelativeLayout
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_margin="8dp">
+    android:layout_margin="8dp"
+    android:background="@color/colorPrimary">
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
+        app:cardBackgroundColor="@color/colorPrimary"
         card_view:cardCornerRadius="4dp"
-        card_view:cardElevation="1dp"
+        card_view:cardElevation="0dp"
         card_view:cardUseCompatPadding="true">
 
         <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="4dp">
+            android:background="@color/colorPrimary"
+            android:padding="8dp">
 
-        <TextView
-            android:id="@+id/author"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:autoSizeMaxTextSize="12sp"
-            android:autoSizeMinTextSize="8sp"
-            android:autoSizeTextType="uniform"
-            android:textStyle="bold" />
+            <TextView
+                android:id="@+id/author"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:autoSizeMaxTextSize="12sp"
+                android:autoSizeMinTextSize="8sp"
+                android:autoSizeTextType="uniform"
+                android:textColor="@color/colorOnBackground"
+                android:textSize="18sp"
+                android:textStyle="bold" />
 
-        <TextView
-            android:id="@+id/content"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/author"
-            android:autoSizeMaxTextSize="12sp"
-            android:layout_marginTop="8dp"
-            android:autoSizeMinTextSize="8sp"
-            android:autoSizeTextType="uniform"/>
+            <TextView
+                android:id="@+id/content"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/author"
+                android:layout_marginTop="8dp"
+                android:autoSizeTextType="uniform"
+                android:textColor="@color/colorOnBackgroundLight" />
         </RelativeLayout>
     </androidx.cardview.widget.CardView>
 
 </RelativeLayout>
-</ScrollView>

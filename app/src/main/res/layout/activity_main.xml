@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/colorPrimaryVariant"
     tools:context=".view.MainActivity">
 
     <androidx.recyclerview.widget.RecyclerView
@@ -16,11 +18,11 @@
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:text="@string/error_msg"
+        android:textColor="@color/colorOnBackground"
         android:textSize="16sp"
         android:visibility="invisible" />
 
     <Button
-        android:id="@+id/retry"
         android:layout_width="wrap_content"
         android:layout_height="40dp"
         android:layout_below="@id/error_msg"
@@ -30,6 +32,19 @@
         android:text="@string/retry"
         android:textColor="@color/colorWhite"
         android:visibility="invisible" />
+
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/retry"
+        android:layout_width="180dp"
+        android:layout_height="56dp"
+        android:layout_below="@id/error_msg"
+        android:layout_centerInParent="true"
+        android:layout_marginTop="16dp"
+        android:text="@string/retry"
+        android:textColor="@color/colorWhite"
+        android:visibility="invisible"
+        app:cornerRadius="24dp" />
 
     <ProgressBar
         android:id="@+id/progress_bar"
