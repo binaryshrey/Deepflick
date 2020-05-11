@@ -181,6 +181,9 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Mov
                 query = "top_rated";
                 loadData(query);
                 Toast.makeText(this, "Top Rated Movies", Toast.LENGTH_SHORT).show();
+
+            case R.id.favorite:
+                Toast.makeText(this, "Favorite Movies", Toast.LENGTH_SHORT).show();
         }
         return super.onOptionsItemSelected(item);
     }
