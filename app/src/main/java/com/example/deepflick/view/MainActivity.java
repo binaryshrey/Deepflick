@@ -1,7 +1,11 @@
 package com.example.deepflick.view;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -18,6 +22,8 @@ import android.widget.Toast;
 
 import com.example.deepflick.R;
 import com.example.deepflick.adapter.MoviesAdapter;
+import com.example.deepflick.database.FavoriteMovie;
+import com.example.deepflick.database.FavoriteMovieDatabase;
 import com.example.deepflick.model.Movie;
 import com.example.deepflick.utils.NetworkUtils;
 import com.example.deepflick.utils.TMDBJsonUtils;
@@ -35,8 +41,13 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Mov
     //defining data members
     public MoviesAdapter moviesAdapter;
     public List<Movie> jsonMovieData;
-    public String query = "popular";
+    public String Popular = "popular";
+    public String Top_Rated = "top_rated";
+    public String Favorite = "favorite";
+    //setting default sort as popular movies
+    public String Sort = Popular;
     public static final String LIFECYCLE_STATE = "state";
+    private List<FavoriteMovie> favMovie;
 
     //using @BindView along with the id of the view to declare view variable
     @BindView(R.id.recyclerview_movies)
@@ -52,7 +63,7 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Mov
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if(savedInstanceState != null)
-            query = savedInstanceState.getString(LIFECYCLE_STATE);
+            Sort = savedInstanceState.getString(LIFECYCLE_STATE);
 
         setContentView(R.layout.activity_main);
 
@@ -65,14 +76,15 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Mov
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setAdapter(moviesAdapter);
 
-        //passing the query parameter into the loadData method
-        loadData(query);
+        favMovie = new ArrayList<FavoriteMovie>();
+        initViewModel();
+
     }
 
     //onSaveInstanceState method to persist dataChanges on change of device configuration
     @Override
     protected void onSaveInstanceState(@NonNull Bundle outState) {
-        String lifeCycleSortState = query;
+        String lifeCycleSortState = Sort;
         outState.putString(LIFECYCLE_STATE,lifeCycleSortState);
         super.onSaveInstanceState(outState);
 
@@ -82,13 +94,39 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Mov
     //method to fetch data on button click after detecting no internet connection
     @OnClick(R.id.retry)
     public void onButtonClick(View view){
-        loadData(query);
+        loadData(Sort);
+    }
+
+
+    public void initViewModel(){
+        MainViewModel viewModel = new ViewModelProvider(this).get(MainViewModel.class);
+        viewModel.getMovies().observe(this, fm -> {
+            if(fm.size()>=0) {
+                favMovie.clear();
+                favMovie = fm;
+            }
+            loadData(Sort);
+        });
+
     }
 
     //method to fetch data based on query paramater
     public void loadData(String str){
-        showJsonDataResults();
-        new FetchMovieTask().execute(str);
+        if(Sort.equals(Favorite))
+            loadFavorite();
+        else {
+            showJsonDataResults();
+            new FetchMovieTask().execute(str);
+        }
+    }
+
+    public void loadFavorite(){
+        cleanData();
+        for (int i = 0; i< favMovie.size(); i++) {
+            Movie movie = new Movie(String.valueOf(favMovie.get(i).getId()), favMovie.get(i).getTitle(), favMovie.get(i).getThumbnail(), favMovie.get(i).getRating(), favMovie.get(i).getAdult(), favMovie.get(i).getReleaseDate(), favMovie.get(i).getOverview());
+            jsonMovieData.add( movie );
+        }
+        moviesAdapter.setMovies(jsonMovieData);
     }
 
     public class FetchMovieTask extends AsyncTask<String, Void, List<Movie>> {
@@ -168,22 +206,36 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Mov
         return true;
     }
 
+    public void cleanData(){
+        if(jsonMovieData!=null)
+            jsonMovieData.clear();
+        else
+            jsonMovieData = new ArrayList<Movie>();
+    }
+
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int itemThatWasSelected = item.getItemId();
         switch (itemThatWasSelected){
             case R.id.popular:
-                query = "popular";
-                loadData(query);
+                cleanData();
+                Sort = Popular;
+                loadData(Sort);
                 Toast.makeText(this, "Popular Movies", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.top_rated:
-                query = "top_rated";
-                loadData(query);
+                cleanData();
+                Sort = Top_Rated;
+                loadData(Sort);
                 Toast.makeText(this, "Top Rated Movies", Toast.LENGTH_SHORT).show();
+                break;
 
             case R.id.favorite:
+                cleanData();
+                Sort = Favorite;
+                loadData(Sort);
                 Toast.makeText(this, "Favorite Movies", Toast.LENGTH_SHORT).show();
+                break;
         }
         return super.onOptionsItemSelected(item);
     }

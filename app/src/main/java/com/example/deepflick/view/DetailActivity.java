@@ -15,8 +15,11 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.deepflick.R;
 import com.example.deepflick.adapter.ReviewsAdapter;
 import com.example.deepflick.adapter.TrailersAdapter;
+import com.example.deepflick.database.FavoriteMovie;
+import com.example.deepflick.database.FavoriteMovieDatabase;
 import com.example.deepflick.model.Review;
 import com.example.deepflick.model.Trailer;
+import com.example.deepflick.utils.AppExecutors;
 import com.example.deepflick.utils.NetworkUtils;
 import com.example.deepflick.utils.TMDBJsonUtils;
 import com.squareup.picasso.Picasso;
@@ -36,7 +39,9 @@ public class DetailActivity extends AppCompatActivity {
     public ReviewsAdapter mReviewAdapter;
     public List<Review> jsonReviewData;
 
-    public String id;
+    private FavoriteMovieDatabase mDB;
+    public boolean isFavoriteMovie = false;
+    public String id,title,thumbnail,rating,adult,releaseDate,overview;
 
     //using @BindView along with the id of the view to declare view variable
     @BindView(R.id.detail_thumbnail)
@@ -75,6 +80,8 @@ public class DetailActivity extends AppCompatActivity {
     @BindView(R.id.error_msg_review)
     TextView mReviewErrorMessage;
 
+    @BindView(R.id.fav)
+    ImageView mFavButton;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -100,6 +107,39 @@ public class DetailActivity extends AppCompatActivity {
         mReviewAdapter = new ReviewsAdapter(jsonReviewData);
         mReviewRecyclerView.setAdapter(mReviewAdapter);
 
+        id = getIntent().getStringExtra("id");
+        title = getIntent().getStringExtra("title");
+        thumbnail = getIntent().getStringExtra("poster");
+        rating = getIntent().getStringExtra("rate");
+        releaseDate = getIntent().getStringExtra("release");
+        overview = getIntent().getStringExtra("overview");
+        adult = getIntent().getStringExtra("adult");
+
+
+        mDB = FavoriteMovieDatabase.getInstance(getApplicationContext());
+        AppExecutors.getInstance().diskIO().execute(() -> {
+            final FavoriteMovie fm = mDB.movieDao().loadMovieById(Integer.parseInt(id));
+            setFavorite((fm != null)? true : false);
+        });
+
+        //method to load the trailers based on specific movie id
+        loadTrailers(id);
+        loadReviews(id);
+
+    }
+
+
+    private void setFavorite(boolean fav){
+        if (fav) {
+            isFavoriteMovie = true;
+            mFavButton.setImageResource(R.drawable.ic_favorite_red_24dp);
+        } else {
+            isFavoriteMovie = false;
+            mFavButton.setImageResource(R.drawable.ic_favorite_white_24dp);
+        }
+    }
+
+    public void displayIntentValues(){
         //loading image with picasso into mDetailThumbnail view
         Picasso.get()
                 .load(getIntent().getStringExtra("poster"))
@@ -119,14 +159,24 @@ public class DetailActivity extends AppCompatActivity {
             mAdult.setText("Yes");
         else
             mAdult.setText("No");
-        //get Movie Id
-        id = getIntent().getStringExtra("id");
 
-        //method to load the trailers based on specific movie id
-        loadTrailers(id);
-        loadReviews(id);
 
+        // Favorite
+        //@Override
+        mFavButton.setOnClickListener(v -> {
+            final FavoriteMovie fmov = new FavoriteMovie(Integer.parseInt(id),title,thumbnail,rating,adult,releaseDate,overview);
+            AppExecutors.getInstance().diskIO().execute(() -> {
+                if (isFavoriteMovie)
+                    // delete item
+                    mDB.movieDao().deleteFavMovie(fmov);
+                else
+                    // insert item
+                    mDB.movieDao().insertFavMovie(fmov);
+                runOnUiThread(() -> setFavorite(!isFavoriteMovie));
+            });
+        });
     }
+
 
     //method to load the trailers based on specific movie id
     private void loadTrailers(String MovieId) {
@@ -174,6 +224,7 @@ public class DetailActivity extends AppCompatActivity {
                 mErrorMessage.setVisibility(View.INVISIBLE);
                 mTrailerAdapter = new TrailersAdapter(trailerData, DetailActivity.this);
                 mRecyclerView.setAdapter(mTrailerAdapter);
+                displayIntentValues();
             } else {
                 mErrorMessage.setVisibility(View.VISIBLE);
                 mRecyclerView.setVisibility(View.INVISIBLE);
@@ -191,17 +242,14 @@ public class DetailActivity extends AppCompatActivity {
 
         @Override
         protected List<Review> doInBackground(String... params) {
-            if (params.length == 0){
+            if (params.length == 0)
                 return null;
-            }
 
             URL movieRequestUrl = NetworkUtils.buildReviewsUrl(id);
 
             try {
                 String jsonMovieResponse = NetworkUtils.getResponseFromHttpUrl(movieRequestUrl);
-
                 jsonReviewData = TMDBJsonUtils.parseReviewValuesFromJson(DetailActivity.this, jsonMovieResponse);
-
                 return jsonReviewData;
 
             } catch (Exception e) {

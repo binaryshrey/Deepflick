@@ -13,6 +13,16 @@ public class Movie {
     //constructor
     public Movie(){}
 
+    public Movie(String id,String title, String thumbnail, String rating, String adult, String releaseDate, String overview){
+        this.mId = id;
+        this.mTitle = title;
+        this.mThumbnail = thumbnail;
+        this.mRating = rating;
+        this.mAdult = adult;
+        this.mReleaseDate = releaseDate;
+        this.mOverview = overview;
+    }
+
     //getter method
     public String getTitle() { return mTitle; }
     //setter method

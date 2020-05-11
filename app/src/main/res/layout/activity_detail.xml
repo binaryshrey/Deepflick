@@ -31,6 +31,13 @@
                     android:id="@+id/detail_thumbnail"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent" />
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginLeft="16dp"
+                    android:id="@+id/fav"
+                    android:src="@drawable/ic_favorite_white_24dp"/>
             </androidx.cardview.widget.CardView>
 
             <TextView
