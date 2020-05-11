@@ -32,7 +32,6 @@ public class TrailersAdapter extends RecyclerView.Adapter<TrailersAdapter.Traile
         this.context = context;
     }
 
-
     //methods onCreateViewHolder, onBindViewHolder, getItemCount
     @NonNull
     @Override

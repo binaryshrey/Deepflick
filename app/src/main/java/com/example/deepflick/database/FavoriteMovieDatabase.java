@@ -8,6 +8,8 @@ import androidx.room.RoomDatabase;
 
 @Database(entities = {FavoriteMovie.class}, version = 1, exportSchema = false)
 public abstract class FavoriteMovieDatabase extends RoomDatabase {
+    //reference taken from TODO_PROJECT lessons in Android Architecture lectures
+
     private static final Object LOCK = new Object();
     private static final String DATABASE_NAME = "FavMoviesList";
     private static FavoriteMovieDatabase sInstance;

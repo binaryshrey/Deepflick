@@ -9,7 +9,8 @@ import androidx.room.Query;
 import androidx.room.Update;
 
 import java.util.List;
-
+//DAO
+//reference taken from TODO_PROJECT lessons in Android Architecture lectures
 @Dao
 public interface FavoriteMovieDAO {
     @Query("SELECT * FROM FavMovie ORDER BY mId")

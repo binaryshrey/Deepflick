@@ -5,7 +5,7 @@
     <string name="top_rated">Top Rated</string>
     <string name="error_msg">No Connection</string>
     <string name="error_msg2">You are 404 million kilometres away from us.</string>
-    <string name="error_msg3">Please tap on Refresh button to try connection back.</string>
+    <string name="error_msg3">Please tap on Refresh button to try connecting back.</string>
     <string name="refresh">REFRESH NOW</string>
     <string name="rating">Rating : </string>
     <string name="release_date">Release Date : </string>

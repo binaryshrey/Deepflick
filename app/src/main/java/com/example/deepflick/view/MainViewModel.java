@@ -11,7 +11,7 @@ import com.example.deepflick.database.FavoriteMovieDatabase;
 import java.util.List;
 
 public class MainViewModel extends AndroidViewModel {
-
+    //reference taken from TODO_PROJECT lessons in Android Architecture lectures
     private LiveData<List<FavoriteMovie>> movies;
 
     public MainViewModel(Application application) {

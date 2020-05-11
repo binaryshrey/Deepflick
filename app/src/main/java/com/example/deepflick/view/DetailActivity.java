@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -35,10 +36,8 @@ public class DetailActivity extends AppCompatActivity {
     //data members
     public TrailersAdapter mTrailerAdapter;
     public List<Trailer> jsonTrailerData;
-
     public ReviewsAdapter mReviewAdapter;
     public List<Review> jsonReviewData;
-
     private FavoriteMovieDatabase mDB;
     public boolean isFavoriteMovie = false;
     public String id,title,thumbnail,rating,adult,releaseDate,overview;
@@ -92,7 +91,7 @@ public class DetailActivity extends AppCompatActivity {
         ButterKnife.bind(this);
 
 
-        //horizontal layoutManager
+        //horizontal layoutManager for Trailers
         LinearLayoutManager layoutManager = new LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL,false);
         //setting the layout
         mRecyclerView.setLayoutManager(layoutManager);
@@ -100,13 +99,17 @@ public class DetailActivity extends AppCompatActivity {
         //set trailer adapter for recycler view
         mRecyclerView.setAdapter(mTrailerAdapter);
 
-
+        //Vertical layoutManager for Reviews
         LinearLayoutManager reviewsLM = new LinearLayoutManager(this);
+        //setting the layout
         mReviewRecyclerView.setLayoutManager(reviewsLM);
         mReviewRecyclerView.setHasFixedSize(true);
         mReviewAdapter = new ReviewsAdapter(jsonReviewData);
+        //set reviews adapter for recycler view
         mReviewRecyclerView.setAdapter(mReviewAdapter);
 
+
+        //storing the data from intent
         id = getIntent().getStringExtra("id");
         title = getIntent().getStringExtra("title");
         thumbnail = getIntent().getStringExtra("poster");
@@ -119,7 +122,8 @@ public class DetailActivity extends AppCompatActivity {
         mDB = FavoriteMovieDatabase.getInstance(getApplicationContext());
         AppExecutors.getInstance().diskIO().execute(() -> {
             final FavoriteMovie fm = mDB.movieDao().loadMovieById(Integer.parseInt(id));
-            setFavorite((fm != null)? true : false);
+            //setting favorites movie
+            Favorite((fm != null)? true : false);
         });
 
         //method to load the trailers based on specific movie id
@@ -128,8 +132,8 @@ public class DetailActivity extends AppCompatActivity {
 
     }
 
-
-    private void setFavorite(boolean fav){
+    //method to display a toast and change icon color according to the condition
+    private void Favorite(boolean fav){
         if (fav) {
             isFavoriteMovie = true;
             mFavButton.setImageResource(R.drawable.ic_favorite_red_24dp);
@@ -139,6 +143,7 @@ public class DetailActivity extends AppCompatActivity {
         }
     }
 
+    //method to render intentValues
     public void displayIntentValues(){
         //loading image with picasso into mDetailThumbnail view
         Picasso.get()
@@ -161,18 +166,17 @@ public class DetailActivity extends AppCompatActivity {
             mAdult.setText("No");
 
 
-        // Favorite
-        //@Override
+        // Favorite button on clickListener
         mFavButton.setOnClickListener(v -> {
             final FavoriteMovie fmov = new FavoriteMovie(Integer.parseInt(id),title,thumbnail,rating,adult,releaseDate,overview);
             AppExecutors.getInstance().diskIO().execute(() -> {
                 if (isFavoriteMovie)
-                    // delete item
+                    // delete movie if present
                     mDB.movieDao().deleteFavMovie(fmov);
                 else
-                    // insert item
+                    // insert movie if not present
                     mDB.movieDao().insertFavMovie(fmov);
-                runOnUiThread(() -> setFavorite(!isFavoriteMovie));
+                runOnUiThread(() -> Favorite(!isFavoriteMovie));
             });
         });
     }

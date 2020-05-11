@@ -10,6 +10,7 @@ import java.util.concurrent.Executors;
 
 public class AppExecutors {
 
+    //reference taken from TODO_PROJECT lessons in Android Architecture lectures
     private static final Object LOCK = new Object();
     private static AppExecutors sInstance;
     private final Executor diskIO;

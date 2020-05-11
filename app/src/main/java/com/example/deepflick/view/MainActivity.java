@@ -76,6 +76,8 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Mov
 
         //binding the view using butterknife
         ButterKnife.bind(this);
+        //setting the title
+        setTitle("Deepflick : Popular");
 
         //defining grid layout that spans two columns
         GridLayoutManager layoutManager = new GridLayoutManager(this,2);
@@ -83,9 +85,10 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Mov
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setAdapter(moviesAdapter);
 
+        //initializing favMovie variable
         favMovie = new ArrayList<FavoriteMovie>();
+        //initViewModel method
         initViewModel();
-
     }
 
     //onSaveInstanceState method to persist dataChanges on change of device configuration
@@ -97,45 +100,49 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Mov
 
     }
 
-
     //method to fetch data on button click after detecting no internet connection
     @OnClick(R.id.refresh)
     public void onButtonClick(View view){
         loadData(Sort);
     }
 
-
     public void initViewModel(){
         MainViewModel viewModel = new ViewModelProvider(this).get(MainViewModel.class);
         viewModel.getMovies().observe(this, fm -> {
+            //checking if any stored data is present
             if(fm.size()>=0) {
                 favMovie.clear();
                 favMovie = fm;
             }
+            //method to load movies data with parameter sort
             loadData(Sort);
         });
-
     }
 
     //method to fetch data based on query paramater
     public void loadData(String str){
+        //if sort is favorite then call loadFavorite method
         if(Sort.equals(Favorite))
             loadFavorite();
         else {
             showJsonDataResults();
+            //async task
             new FetchMovieTask().execute(str);
         }
     }
 
+    //method to load favorite movies
     public void loadFavorite(){
         cleanData();
         for (int i = 0; i< favMovie.size(); i++) {
+            //creating object of Movie class
             Movie movie = new Movie(String.valueOf(favMovie.get(i).getId()), favMovie.get(i).getTitle(), favMovie.get(i).getThumbnail(), favMovie.get(i).getRating(), favMovie.get(i).getAdult(), favMovie.get(i).getReleaseDate(), favMovie.get(i).getOverview());
             jsonMovieData.add( movie );
         }
-        moviesAdapter.setMovies(jsonMovieData);
+        moviesAdapter.setData(jsonMovieData);
     }
 
+    //AsyncTask to fetch moives data
     public class FetchMovieTask extends AsyncTask<String, Void, List<Movie>> {
 
         @Override
@@ -220,6 +227,7 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Mov
         return true;
     }
 
+    //method to clean jsonMovieData variable
     public void cleanData(){
         if(jsonMovieData!=null)
             jsonMovieData.clear();
@@ -229,18 +237,21 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Mov
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        //getting the id of the item that was selected
         int itemThatWasSelected = item.getItemId();
         switch (itemThatWasSelected){
             case R.id.popular:
                 cleanData();
                 Sort = Popular;
                 loadData(Sort);
+                setTitle("Deepflick : Popular");
                 Toast.makeText(this, "Popular Movies", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.top_rated:
                 cleanData();
                 Sort = Top_Rated;
                 loadData(Sort);
+                setTitle("Deepflick : Top Rated");
                 Toast.makeText(this, "Top Rated Movies", Toast.LENGTH_SHORT).show();
                 break;
 
@@ -248,6 +259,7 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Mov
                 cleanData();
                 Sort = Favorite;
                 loadData(Sort);
+                setTitle("Deepflick : Favorites");
                 Toast.makeText(this, "Favorite Movies", Toast.LENGTH_SHORT).show();
                 break;
         }
