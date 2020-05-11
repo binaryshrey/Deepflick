@@ -16,6 +16,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -54,9 +55,15 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Mov
     RecyclerView mRecyclerView;
     @BindView(R.id.progress_bar)
     ProgressBar mProgressBar;
+    @BindView(R.id.iv_error)
+    ImageView mErrorImage;
     @BindView(R.id.error_msg)
-    TextView mErrorMessage;
-    @BindView(R.id.retry)
+    TextView mErrorMessage1;
+    @BindView(R.id.error_msg1)
+    TextView mErrorMessage2;
+    @BindView(R.id.error_msg2)
+    TextView mErrorMessage3;
+    @BindView(R.id.refresh)
     Button mRetry;
 
     @Override
@@ -92,7 +99,7 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Mov
 
 
     //method to fetch data on button click after detecting no internet connection
-    @OnClick(R.id.retry)
+    @OnClick(R.id.refresh)
     public void onButtonClick(View view){
         loadData(Sort);
     }
@@ -173,7 +180,10 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Mov
 
     //setting error message and retry button as invisible and recyclerview as visible
     private void showJsonDataResults() {
-        mErrorMessage.setVisibility(View.INVISIBLE);
+        mErrorImage.setVisibility(View.INVISIBLE);
+        mErrorMessage1.setVisibility(View.INVISIBLE);
+        mErrorMessage2.setVisibility(View.INVISIBLE);
+        mErrorMessage3.setVisibility(View.INVISIBLE);
         mRetry.setVisibility(View.INVISIBLE);
         mRecyclerView.setVisibility(View.VISIBLE);
     }
@@ -181,8 +191,12 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Mov
     //setting error message and retry button as visible and recyclerview as invisible
     private void showErrorMessage() {
         mRecyclerView.setVisibility(View.INVISIBLE);
+        mErrorImage.setVisibility(View.VISIBLE);
         mRetry.setVisibility(View.VISIBLE);
-        mErrorMessage.setVisibility(View.VISIBLE);
+        mErrorMessage1.setVisibility(View.VISIBLE);
+        mErrorMessage2.setVisibility(View.VISIBLE);
+        mErrorMessage3.setVisibility(View.VISIBLE);
+
     }
 
     @Override
