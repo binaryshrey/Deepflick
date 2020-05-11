@@ -24,6 +24,7 @@ import com.example.deepflick.utils.TMDBJsonUtils;
 
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -33,7 +34,7 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Mov
 
     //defining data members
     public MoviesAdapter moviesAdapter;
-    public ArrayList<Movie> jsonMovieData;
+    public List<Movie> jsonMovieData;
     public String query = "popular";
     public static final String LIFECYCLE_STATE = "state";
 
@@ -90,7 +91,7 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Mov
         new FetchMovieTask().execute(str);
     }
 
-    public class FetchMovieTask extends AsyncTask<String, Void, ArrayList<Movie>> {
+    public class FetchMovieTask extends AsyncTask<String, Void, List<Movie>> {
 
         @Override
         protected void onPreExecute() {
@@ -100,7 +101,7 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Mov
         }
 
         @Override
-        protected ArrayList<Movie> doInBackground(String... params) {
+        protected List<Movie> doInBackground(String... params) {
             if (params.length == 0)
                 return null;
             String sortBy = params[0];
@@ -119,7 +120,7 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Mov
         }
 
         @Override
-        protected void onPostExecute(ArrayList<Movie> moviesData) {
+        protected void onPostExecute(List<Movie> moviesData) {
             //setting progress bar as invisible
             mProgressBar.setVisibility(View.INVISIBLE);
             if (moviesData != null) {

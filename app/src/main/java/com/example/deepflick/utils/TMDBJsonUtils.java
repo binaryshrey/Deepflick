@@ -11,11 +11,12 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class TMDBJsonUtils {
 
     //method to parse movies_json data
-    public static ArrayList<Movie> parseValuesFromJson(Context context, String data) throws JSONException {
+    public static List<Movie> parseValuesFromJson(Context context, String data) throws JSONException {
         //data members
         final String ROOT_OBJECT = "results";
         final String TITLE_KEY = "title";
@@ -50,7 +51,7 @@ public class TMDBJsonUtils {
     }
 
     //method to parse trailers_json data
-    public static ArrayList<Trailer> parseTrailerValuesFromJson(Context context, String data) throws JSONException {
+    public static List<Trailer> parseTrailerValuesFromJson(Context context, String data) throws JSONException {
         //data members
         final String ROOT_OBJECT = "results";
         final String TRAILER_KEY_KEY = "key";
@@ -74,7 +75,7 @@ public class TMDBJsonUtils {
     }
 
     //method to parse reviews_json data
-    public static ArrayList<Review> parseReviewValuesFromJson(Context context, String data) throws JSONException{
+    public static List<Review> parseReviewValuesFromJson(Context context, String data) throws JSONException{
         //data members
         final String ROOT_OBJECT = "results";
         final String AUTHOR_KEY = "author";

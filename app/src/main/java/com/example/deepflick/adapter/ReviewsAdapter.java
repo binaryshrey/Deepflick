@@ -13,15 +13,16 @@ import com.example.deepflick.R;
 import com.example.deepflick.model.Review;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class ReviewsAdapter extends RecyclerView.Adapter<ReviewsAdapter.ReviewsAdapterViewHolder>{
 
     //private Review[] mReviewData;
-    private ArrayList<Review> mReviewData;
+    private List<Review> mReviewData;
     TextView mAuthor;
     TextView mContent;
 
-    public ReviewsAdapter(ArrayList<Review> review) {
+    public ReviewsAdapter(List<Review> review) {
         mReviewData = review;
     }
 

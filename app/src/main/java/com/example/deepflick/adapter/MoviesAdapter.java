@@ -14,17 +14,18 @@ import com.example.deepflick.model.Movie;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MoviesAdapterViewHolder> {
     //declaring data members
-    public ArrayList<Movie> mMovieData;
+    public List<Movie> mMovieData;
     public final MovieAdapterOnClickHandler mClickHandler;
 
     //constructor
-    public MoviesAdapter(ArrayList<Movie> movie, MovieAdapterOnClickHandler clickHandler) {
+    public MoviesAdapter(List<Movie> movie, MovieAdapterOnClickHandler clickHandler) {
         mMovieData = movie;
         mClickHandler = clickHandler;
     }

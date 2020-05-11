@@ -15,18 +15,19 @@ import com.example.deepflick.R;
 import com.example.deepflick.model.Trailer;
 
 import java.util.ArrayList;
+import java.util.List;
 
 
 public class TrailersAdapter extends RecyclerView.Adapter<TrailersAdapter.TrailersAdapterViewModel> {
 
     //declaring data members
-    private ArrayList<Trailer> mTrailerData;
+    private List<Trailer> mTrailerData;
     final String BASE_URL = "https://www.youtube.com/watch?v=";
     TextView mTrailerName;
     Context context;
 
     //constructor
-    public TrailersAdapter(ArrayList<Trailer> trailer, Context context) {
+    public TrailersAdapter(List<Trailer> trailer, Context context) {
         mTrailerData = trailer;
         this.context = context;
     }

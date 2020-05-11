@@ -23,6 +23,7 @@ import com.squareup.picasso.Picasso;
 
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -30,10 +31,10 @@ import butterknife.ButterKnife;
 public class DetailActivity extends AppCompatActivity {
     //data members
     public TrailersAdapter mTrailerAdapter;
-    public ArrayList<Trailer> jsonTrailerData;
+    public List<Trailer> jsonTrailerData;
 
     public ReviewsAdapter mReviewAdapter;
-    public ArrayList<Review> jsonReviewData;
+    public List<Review> jsonReviewData;
 
     public String id;
 
@@ -136,7 +137,7 @@ public class DetailActivity extends AppCompatActivity {
     }
 
     // Async Task for fetch all trailers
-    public class FetchTrailerTask extends AsyncTask<String, Void, ArrayList<Trailer>> {
+    public class FetchTrailerTask extends AsyncTask<String, Void, List<Trailer>> {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
@@ -145,7 +146,7 @@ public class DetailActivity extends AppCompatActivity {
         }
 
         @Override
-        protected ArrayList<Trailer> doInBackground(String... params) {
+        protected List<Trailer> doInBackground(String... params) {
             if (params.length == 0)
                 return null;
 
@@ -165,7 +166,7 @@ public class DetailActivity extends AppCompatActivity {
         }
 
         @Override
-        protected void onPostExecute(ArrayList<Trailer> trailerData) {
+        protected void onPostExecute(List<Trailer> trailerData) {
             //setting progress bar as invisible
             mProgressBar.setVisibility(View.INVISIBLE);
             mRecyclerView.setVisibility(View.VISIBLE);
@@ -181,7 +182,7 @@ public class DetailActivity extends AppCompatActivity {
     }
 
     //Async task for reviews
-    public class FetchReviewTask extends AsyncTask<String, Void, ArrayList<Review>> {
+    public class FetchReviewTask extends AsyncTask<String, Void, List<Review>> {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
@@ -189,7 +190,7 @@ public class DetailActivity extends AppCompatActivity {
         }
 
         @Override
-        protected ArrayList<Review> doInBackground(String... params) {
+        protected List<Review> doInBackground(String... params) {
             if (params.length == 0){
                 return null;
             }
@@ -199,8 +200,7 @@ public class DetailActivity extends AppCompatActivity {
             try {
                 String jsonMovieResponse = NetworkUtils.getResponseFromHttpUrl(movieRequestUrl);
 
-                jsonReviewData
-                        = TMDBJsonUtils.parseReviewValuesFromJson(DetailActivity.this, jsonMovieResponse);
+                jsonReviewData = TMDBJsonUtils.parseReviewValuesFromJson(DetailActivity.this, jsonMovieResponse);
 
                 return jsonReviewData;
 
@@ -211,7 +211,7 @@ public class DetailActivity extends AppCompatActivity {
         }
 
         @Override
-        protected void onPostExecute(ArrayList<Review> reviewData) {
+        protected void onPostExecute(List<Review> reviewData) {
             mReviewProgressBar.setVisibility(View.INVISIBLE);
             mReviewRecyclerView.setVisibility(View.VISIBLE);
             if (reviewData != null) {
@@ -223,8 +223,5 @@ public class DetailActivity extends AppCompatActivity {
                 mReviewErrorMessage.setVisibility(View.INVISIBLE);
             }
         }
-
     }
-
-
 }
